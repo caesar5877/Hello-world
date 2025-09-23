@@ -1,0 +1,344 @@
+3 给定按到达时间的样品序列，单机处理每份样品固定X秒，机器忙时样品入容量为Y的FIFO冷冻柜、满则丢弃，返回最后一份被接收样品的完成时间。
+4 口2276
+
+以下是刚做的C1 OA，和一些在codesignal做OA的心得。希望有好心人能给加个米。
+心得总结：
+70分钟四道题，时间很紧（也是我太菜）
+没有复杂算法，主要是繁琐的实现 （感觉这种情况对于用java的小菜鸡比如我来说非常不友好，不如用python）
+Q1，Q2很简单，并且没有苛刻的runtime要求，怎么快怎么写，最好15分钟两道都写完。不用写得好看！（我水平不够又有强迫症，这次浪费了时间）
+Q3 一般是Grid，Matrix这种，code量最大，实现比较繁琐，但是依旧对算法没有什么要求。
+Q4我没来得及看，但是网上说Q4一般是唯一一道有runtime要求的题，相比于Q3来说更考察算法。
+针对以上这种难度分布，比较好的策略是：快速做完Q1，Q2，然后做出Q4的暴力解法通过部分test，然后回头耐心实现Q3，最后如果有时间去返工Q4提升runtime。
+题目：
+给你一个string，求问string里有多少个长度为3的substring包含至少一个vowel（大小写都算），返回int
+给你一个string，按以下规则修改它并返回心得string，规则如下：
+遇到vowel不变
+遇到consonant，就改成它的下一个consonant
+b的下一个consonant是c，z的下一个consonant是b
+维持原字母的大小写
+给你一个grid（n * m），你在[0,0]，要去[n-1, m-1]。grid上有teleport和obstacle。如果遇到teleport，会从[teleport[0], teleport[1]] 被传送到 [teleport[2], teleport[3]]。如果遇到obstacle或者grid边界，你停下。其他情况下，你只能向右走，也就是row不变，col加一。
+如果你能抵达[n-1, m-1]，回传走了多少步。起点，终点，teleport的两个点都算在内。
+如果你不能抵达[n-1, m-1]，并卡在一点，回传-1。
+如果你不能抵达[n-1, m-1]，并陷入循环，回传-2。
+没啦。考虑给加个米吧。我在找工好想看面经啊。
+
+
+9.15刚做完，CodeSignal平台，600/600
+70分钟4道题:
+1. Toggle Case of String
+描述
+实现一个函数，接受一个字符串，返回一个新字符串，将其中每个英文字母的大小写切换（大写变小写，小写变大写），非字母字符保持不变。
+要求
+        •        输入是任意字符串，可以为空。
+        •        输出字符串应保持原字符顺序，只修改字母的大小写。
+        •        时间复杂度应为 O(n)，其中 n 为字符串长度。
+例子
+        •        输入: "Hello, World!"
+        •        输出: "hELLO, wORLD!"
+2. Simplified cd Command
+描述
+初始目录为根目录 /。给定一系列命令，执行后返回最终绝对路径。
+命令格式：
+        •        cd x 进入子目录 x（x 为小写英文字母）
+        •        cd . 留在当前目录
+        •        cd .. 返回上一级（在 / 时仍为 /）
+        •        cd / 返回根目录
+要求
+        •        输出以 / 开头，目录用 / 分隔。
+        •        仅根据给定命令序列更新路径。
+        •        注意边界：多次 ../ 不会越过根目录。
+例子
+        •        输入: commands = ["cd users", "cd codesignal", "cd .."]
+        •        输出: "/users"
+3. Moisture Grid Smoothing
+描述
+给定一个二维矩阵 moistureGrid 表示土壤湿度，以及一个整数 smoothingRadius。
+更新规则：每个单元格的新湿度值 = (自身值 + 邻居平均值) // 2。
+邻居是指在半径范围内的上下左右对角格子（不越界）。
+要求
+        •        考虑边界情况：邻居可能少于 8 个。
+        •        如果某个单元格没有邻居，其值保持不变。
+        •        时间复杂度不超过 O(n*m)，其中 n, m 是网格大小。
+例子
+        •        输入: moistureGrid = [
+  [9, 6],
+  [3, 0]
+]
+smoothingRadius = 1
+        •        输出: [
+  [6, 5],
+  [4, 3]
+]
+4. Largest Square in Histogram (Cityline)
+描述
+给定一个数组 Cityline，表示直方图中每个柱子的高度，要求找到可以放进该直方图中的最大正方形的面积。
+要求
+        •        正方形的边必须由连续的柱子支撑。
+        •        面积 = (边长)^2，边长 ≤ min(最矮柱高度, 宽度)。
+        •        输出最大正方形的面积。
+        •        时间复杂度 O(n)（单调栈解法）。
+例子
+        •        输入: [1, 2, 3, 2, 1]
+        •        输出: 4  (边长=2，面积=2²)
+        •        输入: [4, 3, 4]
+        •        输出: 9  (边长=3，面积=3²)
+        •        输入: [2, 2, 2]
+        •        输出: 4  (边长=2，面积=2²)
+
+
+刚做了capital one的OA，分享给大家，希望你能给加米。积分不够，很多帖子都看不成😂
+建议做题顺序：1, 2, 4, 3。我碰到的题目里3要写的代码最多，其实不难，就是写起来麻烦，
+第一题，简单题，给一个数组，找到相邻两个数一个为奇数，一个位偶数的位置，然后返回index，否则返回-1
+例如【1，1，6】，返回2，因为相邻的两个数【1，6】满足条件
+【1，1，1】，返回-1
+第二题
+给一个array和一个replacement rate，array里只有'A’和'P'，例如【'A’，'A’，'A’，'P'，'P'，'P'】，让根据以下规则改变array，返回需要多少轮能到最终状态
+如果array末尾的'P'数量大于或者等于replacement rate，去除末尾的‘P‘，去除数量为replacement rate
+如果array里有'A’，把最后一个'A’换成'P’
+否则，到达最终状态
+第三题，memory allocation and removal，给一个1d array （memory）和一个2d array （queries）。每个query要么allocate memory，要么根据id，erase memory。代码量比较大，直接写就行
+第四题，给一个数组和整数（distance），找数组里数值最接近的两个数，这两个数的距离要不小于distance。好像是利口原题，记不清了。
+
+
+70分钟四道题，时间很紧张。
+第一二题白给，忘记了。
+第三题是给一个paragraphs = [["hello, word"], ["ni", "hao","aabbssss"]]和width，让你return一个formatted array。每一行都要在规定width之内，首尾额外加两行星号，以及每一行开头和结尾也要加星号，星号不算在width里，然后衔接paragraph里的word需要加space，space算在width里，如果这一行不够width，在这一行的左右加空格。比如说width =11，你要return的结果大概是
+[
+"**************",
+"*hello world*",
+"*     ni hao   *",
+"*  aabbssss  *",
+"**************"
+]。
+难度不是很大，debug花了一些时间。
+第四题好像是leetcode原题。一个lamps array，每一个lamp照射的范围是lamp[0]-lamp[1] 到lamp[0] + lamp[1]. 求被照射的最多的点，如果照射的点次数相同，return坐标最小的。我没做出最优。140/300
+前面三题都没说需要optimal，最后一题一定要optimal。
+
+
+網上海投的，OA 給了四道題
+Q1: 給定一個 array of integer，計算共有多少個 integer 裡面出現 0 的次數是 odd。
+e.g. nums = [10, 4, 102, 53, 700], return 2
+Q2: 這題比較麻煩。給定一個 array ["A", "A", "A"..."P", "P"...]，只會有 A 和 P，然後 A 都會出現在 P 前面。另外還給了一個 conversionRate，如果 converstionRate = 3，代表可以把末端的 3 of "P" 都換成 A。題目說每回合可以做三件事：(1) 如果尾端的 P 數量大於 conversionRate，除了刪掉 P 之外，還會在 array 前端插入一個 A, (2) 如果 (1) 做不了，那個把末端一個 A 換成 P, (3) 如果 (1) 和 (2) 都做不了則停止處理。題目要問說可以做幾回合
+Q3: 這題後來找了一下地裏有出現過。給定一個 grid，每個 grid[i][j] 代表氣球的顏色編號。在同一時間內 grid[i][j] 會爆炸，然後會影響到上下左右其他四顆氣球。如果其他氣球編號一樣 and if 鄰居至少有兩顆以上顏色一樣的話，中間和旁邊四顆才會爆炸。
+氣球爆炸後當前 grid[i][j] 變成空。但是如果某顆氣球沒有爆炸，下面又有空間，則這顆氣球會因為重力掉落到底部。需要回傳爆炸後、氣球掉落後的新 grid。
+Q4: 給定一個 travelHistory，是 array of array。e.g. [[3, 5], [1, 4], [2,4],[1,5]]，[3,5] 代表先走過 location 3，之後才去拜訪 location 5。題目問說能否還原出 travelHistory，這題範例答案是 [3, 5, 1, 4, 2]。題目類似 哩扣 貳夭零。
+後來沒時間寫完 Q3 氣球掉落後的樣子
+
+
+
+https://www.1point3acres.com/bbs/thread-1142585-1-1.html
+
+昨天刚在Codesignal上考的OA，70分钟4道题，其中第三题和第四题的类似题都在地里出现过。第一题比较简单，第二题比第一题稍微复杂些。时间还是挺紧张的，前面两题因为codes有小bug所以调试花了些时间，我做完了Q1, Q2和Q4，过了所有testcases。第3题因为时间不够只写了一半，所以Q3的testcases都没通过。最后分数是500/600，希望能进入下一轮面试🙏🏻。详细信息如下，用英文写的，尽量贴近题目原意。新人发帖，求大家多加米，感谢！
+Q1: given an integer array nums and a number k, check if each number in the nums array is a power of k, return the total number of integer numbers in the nums array that are power of k.
+Example:
+input: nums = [1,3,5,8,16], k=2
+output: 3. Because 1, 8 and 16 are power of 2. 
+Q2: given the shuttle departure time schedule for each space station Alpha and Beta, your mission is to travel back and forth between Alpha and Beta. One mission is a round trip between Alpha and Beta (depart from Alpha, arrive at Beta, then depart from Beta and arrive at Alpha), one-way trip from Alpha to Beta or from Beta to Alpha costs 100 time units. Given the number of missions, find the finishing time when all missions are completed. You can assume you always catch the earliest shuttle as possible.
+Example:
+Input: AlphaToBeta= [10, 199, 420, 600], BetaToAlpha= [99, 280, 450, 550], missions=2
+Output: 650. You depart from Alpha at time 10, arrive at Beta at time 10+100=110, then you need to wait until time 280 to depart from Beta to travel back to alpha, then you arrive at Alpha at time 280+100=380, so far you finish 1 mission. Next, you wait until time 420 to depart from Alpha again, arrive at Beta at time 420+100=520, then you wait until time 550 to depart from Beta to go back to Alpha at time 550+100=650, till now you finish all the 2 missions.
+ Q3: it’s about allocating and erasing memory, very similar to a question posted here before (see links below), just one more specification: when you find the left-most memory block, the index needs to be modulo of 8.
+Similar to the question in picture 3 (p3) here: 🔗 www.1point3acres.com
+Also, similar to Question 4 posted here: 🔗 leetcode.com
+ Q4: it’s the same Q4 question as another post, 🔗 www.1point3acres.com, rephrased in another context. A tourist has visited many sites, unfortunately, the file that records his journey is damaged. However, he has many photos, each photo contains 2 sites that he visited consecutively, so his entire journey can be reconstructed from those photos. Your task is to help him reconstruct his journey, during this journey each site is visited only once.
+
+
+刚做了新题，好像没看到原题，写一下求米！前两个题很简单不太记得了，就是普通的数组hashmap就写得出来，完全没有算法可言
+第三题是二维数组实现换行，换列，反转，90度翻转，也没有难度，就是要写很长
+第四题是给你一些2*n的数组，比如：【2，4】 【4，1】表示在2有个路灯能照亮4半径的长度，4有个路灯能照亮1长度的，输出被最多路灯照到的点，如果有多个，输出最小的那个！
+前三个都没啥，就是70分钟不够用，最后一题用暴力解法超时，没时间写segment tree什么的了。最后得分1040/1200，不知道能不能过 求米看面经
+
+
+一共四道题，无所谓顺序，可以选择先做后面的，但是感觉越往后越难。
+每道题300分，一共1200
+如果只能通过一部分测试，会给一部分的分。
+第一题很简单是个关于array的
+第2题 蠡口723 爆炸唐
+第3题 蠡口2319
+第4题 蠡口3161 没做完 。。。
+
+
+      1.        第一题是判断数组里有多少个数是某个数k的幂，主要看每个数反复除以k能不能得到1，还要注意k=1的特殊情况。
+        2.        第二题是根据行星上的农历，已知年初的月相，算某个日期的月相，月相8个一循环，先算总天数再推偏移量就行，不过要注意月份天数可能记混。
+        3.        第三题是处理气泡爆炸，  地里比较多了
+        4.        第四题是找数组里能通过最多两次数字交换变成一样的数对，比较一下数字差异就行 不过这个我有蛮多test case 挂了
+总而言之都是又臭又长的带有大量阅读的context题，就都是写logics没有什么fancy的算法在里面
+时间还是有点紧的。刚面完就出来写了 求个免费的米 阿里阿多very much
+
+
+有四题
+- 摇巴奇留
+- 幺儿幺儿 (原题SQL, 直接写没有资料库, 输入是list)
+-药巴陆亿
+- 类似于 霸4 但是是找最大正方形
+急需大米，求帮感谢
+
+
+https://www.1point3acres.com/bbs/thread-1135359-1-1.html
+水平有限， 第三题没时间做，也没来的及看是啥题 😭
+第一题， 地里原题
+given n, return a square of length n.
+ex. n = 4, return [["****"],["*  *"],["*   *"],["****"]]
+n=2, return [["**"],["**"]]
+第二题
+string[] strings = { "A", "A", "A", "P", "P", "P" };
+int replaceRate = 2;
+规则：
+If the number of
+"P"
+复制代码
+at the end ≥
+replaceRate
+复制代码
+:
+Remove
+replaceRate
+复制代码
+"P"s from the end
+Insert one "A" at the start
+Else if there’s at least one
+"A"
+复制代码
+:
+Replace the last "A" with a
+"P"
+复制代码
+Else (no "A" left), stop
+calculate the number of rounds required to finish the replacement process
+比如以上array， 最终需要的次数是13次：
+1. ["A", "A", "A", "A", "P"]
+2. ["A", "A", "A", "P", "P"]
+3. ["A", "A", "A", "A"]
+4. ["A", "A", "A", "P"]
+5. ["A", "A", "P", "P"]
+6. ["A", "A", "A"]
+7. ["A", "A", "P"]
+8. ["A", "P", "P"]
+9. ["A", "A"]
+10. ["A", "P"]
+11. ["P", "P"]
+12. ["A"]
+13. ["P"]
+第四题
+Give 2  arrays, find the longest shared prefix between any pair of elements (one from each array).
+example:
+arr1 = [23, 12, 2, 33, 54561, 5, 8932]
+arr2 = [14, 8934, 2, 56, 54561, 8, 54569]
+Looking at common prefixes (digit-by-digit from the left):
+54561
+复制代码
+and
+54569
+复制代码
+share the prefix "5456" ✅
+Longest shared prefix = “5456"
+
+https://www.1point3acres.com/bbs/thread-1135277-1-1.html
+第一题，up down，简单，直接数数组中有几个 U 和几个 D 字符，然后做减法就行。
+
+
+有一个三分钟的题和一个mid，忘记啦
+一个题目是关于String。给一个tagret word，给一个List<String> skeleton，skeleton中的string和word等长，但是部分字母会被替换成 ‘-’ ，如果skeleton的String中的‘-’ 可以被该单词中其他字符替换，并且等于given word，则是一个valid skeleton。返回所有valid的个数。
+例如apple，skeleton：-pple, a-ple, ap-le, a--le. 则只有a-ple, ap-le是valid，return 2。
+
+第三题比较长 但是也没有复杂度的要求
+输入solution（arr<arr<string>>  paragraphs，arr<string> alignment, int width)）
+输出是一篇文章arr<string>，每一行放在arr里输出, 每个词之间空格，一行最长<=width
+比如paragraphs={{hello, world, is, ok}, {longest, paragraphs}} align={LEFT, RIGHT}, weith = 14
+输出
+***************(16个*)
+*helle world is*
+*ok                 *
+*         longest*
+*   paragraphs*
+****************
+第四题是arr1[int] arr2[int] operations arr[arr<int>[OPs]]
+你有两个数组 arr1 和 arr2，以及一组操作 ops，每个操作是：
+- [0, index, num]：把 arr2[index] 改成 num
+- [1, targetsum]：查询当前 arr1 + arr2 中有多少个元素等于 targetsum
+输出是一个arr，每次[1, tgSum]的结果, 用了cache和hash表都没全过tests
+
+
+
+https://www.1point3acres.com/bbs/thread-1135046-1-1.html
+
+4题75分钟，要开摄像头和上传证件。
+第一题：机器人每一步可向上或向下移动一格，移动若干次后，求最终位置是在初始位置的上方，下方，一样？
+第二题：将一数组（A）拆分为两组（B和C），对一元素a，若B中比a大的元素数目比C中比a大的元素数目要多，则将a放入B中，否则放入C中。若平局，则放入B、C中较短的，若再平局，放入B中。（不要求最佳解）
+第三题：LC 2021
+第四题：给定一数组表示内存，0为空闲，1为占用。每一步1）分配空间 或 2）删除分配的空间。若分配空间，则空间开始的位置必须为8的倍数，且有足够的空闲空间。若删除分配的空间，则必须检查要删除的空前是否是用户分配的。（不要求最佳解）
+45分钟，四题都一把过。
+
+https://www.1point3acres.com/bbs/thread-1135030-1-1.html
+[面试经验] 分享下之前准备 capital one 收集的问题合集
+
+
+第一题
+English:
+Given a list of integers, find the sum of elements that are greater than their adjacent elements. For the first and last elements, only compare with their single adjacent element.
+中文:
+给定一个整数列表，找到大于其相邻元素的元素之和。对于第一个和最后一个元素，只与它们唯一的相邻元素比较。
+Examples / 示例
+Example 1 / 示例1
+Input: [1, 3, 2, 4, 1]
+Output: 7
+Explanation:
+- Index 0: 1 < 3, not a peak
+- Index 1: 3 > 1 and 3 > 2, peak (add 3)
+- Index 2: 2 < 3 and 2 < 4, not a peak
+- Index 3: 4 > 2 and 4 > 1, peak (add 4)
+- Index 4: 1 < 4, not a peak
+Sum = 3 + 4 = 7
+第四题
+English:
+Given a list of pairs of integers, find the order of visiting the integers to form a valid path. Each pair represents a connection between two integers. The result should be a sequence that visits all integers exactly once, following the connections.
+中文:
+给定一个整数对列表，找到访问这些整数的顺序以形成有效路径。每个对表示两个整数之间的连接。结果应该是一个序列，按照连接关系恰好访问每个整数一次。
+Examples / 示例
+Example 1 / 示例1
+Input: [[3, 5], [1, 4], [4, 2], [1, 5]]
+Output: [3, 5, 1, 4, 2] or [2, 4, 1, 5, 3]
+Explanation: Following connections: 3-5-1-4-2 forms a valid path
+```
+### Example 2 / 示例2
+```
+Input: [[1, 2], [2, 3], [3, 4]]
+Output: [1, 2, 3, 4] or [4, 3, 2, 1]
+Explanation: Linear path from 1 to 4 or reversed
+```
+### Example 3 / 示例3
+```
+Input: [[1, 3], [2, 4]]
+Output: []
+Explanation: No valid path exists (disconnected components)
+第二题
+注意这题也是两大段话，实在记不清了，仅供参考。
+我当时注意到给的例子的答案貌似不是最优解，所以应该不需要DP？no idea
+English:
+Design a delivery strategy using drones and walking. Given charging stations at specific positions and a drone with limited range, find the minimum walking distance to deliver a package to a target position.
+中文:
+设计一个使用无人机和步行的配送策略。给定特定位置的充电站和有限航程的无人机，找到将包裹送到目标位置的最小步行距离。
+Rules / 规则
+English:
+Start at position 0
+Drone max travel distance without charging is 10 units
+Can use drone from any charging station
+Must walk to charging stations to deploy drone
+Drone can fly to next charging station or target (within range)
+Calculate total walking distance needed
+中文:
+从位置0开始
+无人机不充电最大飞行距离为10单位
+可以从任何充电站使用无人机
+必须步行到充电站部署无人机
+无人机可以飞到下一个充电站或目标（在航程内）
+计算所需的总步行距离
+Examples / 示例
+Example 1 / 示例1
+Input: stations = [3, 5, 7, 15], target = 20, drone_range = 10
+Output: 6
+Explanation:
+- Walk 3 units to station at position 3
+- Drone flies 3→7 (4 units), then 7→17 (10 units, max range)
+- Walk 3 units from 17 to target at 20
+- Total walking: 3 + 3 = 6
