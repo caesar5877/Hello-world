@@ -1,4 +1,72 @@
 
+这是一个关于 Tap-a-Card FIDO（快速身份在线卡片轻触）解决方案的详细说明，内容涵盖其定义、设计考量和功能实现步骤，所有信息均来源于提供的资料 [1-3]。
+
+---
+
+## Tap-a-Card FIDO 是什么？
+
+Tap-a-Card FIDO 是在 **Chase 的挑战即服务（Challenge as a Service, CaaS）平台**内引入的**革命性身份验证方法** [1]。
+
+### 目的和核心特点：
+
+1.  **身份验证**：它允许客户通过**简单地轻触其支持 FIDO 功能的 Chase 借记卡或信用卡**来验证身份 [1]。
+2.  **适用场景**：该方案旨在帮助客户**处理高风险的数字交易**，例如 Zelle 支付 [1]。
+3.  **安全性与便利性**：Tap-a-Card FIDO 提供了比传统凭证（如一次性密码或耗时的 ID 扫描）**更安全、更便捷的替代方案** [1]。
+4.  **技术基础**：它利用了**快速身份在线（FIDO）标准**，这提供了市场上最高的身份验证安全性 [1]。
+5.  **实施步骤**：Tap-a-Card FIDO 的实施涉及两个关键步骤：**FIDO 注册**和随后的**身份验证/验证** [1]。当前的文档主要侧重于身份验证过程 [1]。
+
+## Tap-a-Card FIDO 如何设计？
+
+该设计涉及特定的数据结构、新的 API 端点以及与现有系统的集成，旨在确保 Tap-a-Card FIDO 能够提供无缝的用户体验 [1]。
+
+### 1. 凭证和卡片列表设计 (Credential and Card List Design)
+
+*   **入职凭证 (Onboarding Credential)**：挑战入职表（Challenge Onboarding table）将新增一个名为 **"TAP\_A\_CARD\_FIDO"** 的凭证 [1]。
+*   **挑战选项服务 (Challenge Options Service)**：将有一个新的 API 端点 `reUse/fraud/authentication/challenge-options/v1/options`，以避免破坏移动应用程序的旧版本 [1]。
+*   **卡片信息**：
+    *   设计中要求为 TapCardFIDO 维护一个**独立的卡片列表**，区别于 tapCard [1]。
+    *   响应中必须**显示所有**包含在 "TAP\_A\_CARD\_FIDO" 选项中的卡片 [1]。
+    *   每张卡片都必须有一个**标志（flag）来指示其 FIDO 兼容性** [1, 2]。
+    *   每张卡片的最后**四位数字**需要被指示 [1]。
+
+### 2. API 和数据集成 (API and Data Integration)
+
+*   **交易令牌 (Transaction Token)**：需要与 Secure Access API 集成以检索交易令牌 [2]。**该令牌不会暴露给用户界面 (UI)** [2]。
+*   **卡片 PCI 产品 API (Cards PCI product API)**：必须与 DAS Secure Access API 集成以检索 FIDO 卡片 [2]。
+*   **挑战验证 (Challenge Verification)**：挑战验证应用（Challenge Verification app）重用 v3 端点 `[...]/v3/verifications` [2]。请求主体必须包含联系参考 ID 和 `communicationMethodType` 代码 **TACF**，用于指示这是一个 Tap a card FIDO 动作 [2]。
+
+### 3. 风险和分析集成 (Risk and Analytics Integration)
+
+*   **风险集成**：风险集成将与“tap a card in house solution”相同 [2]。
+    *   每张卡片都会包含一个**标志**来指示其是否符合 FIDO 标准 [2]。
+    *   CaaS 将发送 **FIDO 注册日期**作为 FIDO 合规卡的指标 [2]。
+    *   发送的凭证类型（credential type）指示符是 **TAPACARD** [2]。
+*   **分析**：分析功能将与“tap a card in house solution”相同 [2]。
+
+## Tap-a-Card FIDO 如何实现功能？（认证流程）
+
+该解决方案步骤主要集中在身份验证过程上 [1]。
+
+1.  **调用 CaaS**：首先调用 CaaS 服务进行身份验证，以确保被轻触的卡片是**真实的且属于客户** [1]。
+2.  **风险升级**：如果用户正在进行**高风险交易**（例如，向未知用户进行 Zelle 支付），系统将通过 CaaS 服务来升级（step up）流程，以验证身份 [1]。
+3.  **调用挑战选项服务**：系统调用**挑战选项服务（Challenge Options service）**，该服务将利用下游服务返回 Tap a card FIDO 选项 [1]。
+4.  **发起验证**：移动 UI 利用 **NoFidoNak sdk** 和 Secure Access 服务来启动验证过程 [1]。
+5.  **验证状态查询**：一旦卡片被轻触，CaaS 会通过 SDK 将签名挑战发送给 nofidoNak [1]。随后，**移动 UI** 通过调用 **ChallengeVerification CaaS service** 来检查验证状态 [1]。
+6.  **交易完成**：如果验证成功，用户即可完成交易 [1]。
+
+### 流程图关键步骤 (Design Diagram Key Flow)
+
+设计图显示了功能实现涉及多个组件之间的交互 [3]：
+
+*   **Mobile UI** 向 **DAS/Challenge Options** 请求凭证 [3]。
+*   **DAS/Challenge Options** 与 **Cards PCI** 交互，后者通过 **Secure Access API** 和 **Account Utility** 检索和筛选卡片信息（例如，筛选 FIDO 卡片并检索交易令牌） [3]。
+*   **DAS/Challenge Options** 返回“所有可用卡片”、“初始凭证”和“过滤后的凭证” [3]。
+*   流程涉及存储 FIDO 卡片、交易令牌 [3]。
+*   验证过程中，会进行 NofidoNak SCX 以验证卡片 [3]。
+*   Mobile UI 发送**卡片末尾 4 位数字**，随后系统验证交易 [3]。
+*   流程最终返回成功 (Success) 或失败 (Fail) 结果 [3]。
+
+
 好的，我将根据您提供的资料，用中文详细解释关于将 DPM 和 CSR Admin Tool 引入 CaaS 的信息。
 
 这份设计文档概述了将 Auth Secure Transaction 的一次性密码 (OTP) 生成流程迁移到挑战即服务 (CaaS) 平台的设计，旨在增强安全性和操作效率 [1]。当前，客户服务代表 (CSR) 仍然通过 Call Us 页面生成 OTP [1]。
